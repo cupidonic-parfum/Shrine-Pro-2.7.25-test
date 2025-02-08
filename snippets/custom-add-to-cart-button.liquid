@@ -70,11 +70,10 @@
   $(document).ready(function () {
     // When the custom Add to Cart button is clicked
     $('#custom-add-to-cart').on('click', function (e) {
-      alert();
       e.preventDefault();
 
       var variantID = $('input[name="id"]').val(); // Get variant ID from hidden input (change based on your theme)
-      var quantity = 1;
+      var quantity = $('input[name="quantity"]').val(); // Get quantity from input field (change based on your theme)
 
       // AJAX request to add the product to the cart
       $.ajax({
@@ -102,7 +101,11 @@
     function updateCartCounter() {
       $.getJSON('/cart.js', function (cart) {
         // Assuming you have an element with class .cart-counter
-        $('.cart-counter').text(cart.item_count);
+        $('.cart-count-bubble > span').eq(0).text(cart.item_count);
+        $('.cart-count-bubble > span')
+          .eq(1)
+          .text(`${cart.item_count} item${cart.item_count !== 1 ? 's' : ''}`);
+        $('.quantity-cart').text(cart.item_count);
       });
     }
 
