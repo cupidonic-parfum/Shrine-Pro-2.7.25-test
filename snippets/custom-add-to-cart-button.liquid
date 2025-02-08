@@ -1,0 +1,104 @@
+<!-- Custom Add to Cart Button -->
+<div class="custom-add-to-cart-container">
+  <button id="custom-add-to-cart" class="custom-add-to-cart-button">
+    ADD TO CART
+  </button>
+  <!-- Cart Notification (Optional) -->
+  <div class="cart-notification" style="display: none;">Item added to your cart!</div>
+</div>
+
+<!-- Custom Button Styles -->
+<style>
+  /* Custom Button Styling */
+  .custom-add-to-cart-button {
+    background-color: #91c2d8;  /* Color 1 */
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 14px 30px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 100%;  /* Make the button full-width (optional) */
+  }
+
+  .custom-add-to-cart-button:hover {
+    background-color: #a1c4d4;  /* Color 2 */
+    transform: scale(1.05); /* Slight grow effect */
+  }
+
+  /* Animation for Shaking on Hover */
+  .custom-add-to-cart-button.shake {
+    animation: shake 0.5s ease-in-out infinite;
+  }
+
+  /* Keyframes for Shaking Effect */
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+  }
+
+  /* Cart Notification Styling */
+  .cart-notification {
+    background-color: #91c2d8;  /* Color 1 */
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 16px;
+    display: none;
+  }
+</style>
+
+<!-- Custom Button JS -->
+<script>
+  $(document).ready(function() {
+    // When the custom Add to Cart button is clicked
+    $('#custom-add-to-cart').on('click', function(e) {
+      e.preventDefault();
+
+      var variantID = $('input[name="id"]').val();  // Get variant ID from hidden input (change based on your theme)
+      var quantity = 1;
+
+      // AJAX request to add the product to the cart
+      $.ajax({
+        url: '/cart/add.js',
+        type: 'POST',
+        data: { id: variantID, quantity: quantity },
+        dataType: 'json',
+        success: function(response) {
+          // Update cart count and display notification
+          updateCartCounter();
+          showCartNotification();
+        },
+        error: function(error) {
+          console.log('Error adding to cart:', error);
+        }
+      });
+
+      // Shake button every 2 seconds while hovering (optional)
+      $(this).addClass('shake');
+      setTimeout(function() {
+        $('#custom-add-to-cart').removeClass('shake');
+      }, 2000);
+    });
+
+    function updateCartCounter() {
+      $.getJSON('/cart.js', function(cart) {
+        // Assuming you have an element with class .cart-counter
+        $('.cart-counter').text(cart.item_count);
+      });
+    }
+
+    function showCartNotification() {
+      $('.cart-notification').fadeIn().delay(2000).fadeOut();
+    }
+  });
+</script>
