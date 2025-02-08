@@ -131,12 +131,6 @@
             "margin_bottom": 15
           }
         },
-        "custom_liquid_pcHqtj": {
-          "type": "custom_liquid",
-          "settings": {
-            "custom_liquid": "<!-- Custom Add to Cart Button -->\n<div class=\"custom-add-to-cart-container\">\n  <button id=\"custom-add-to-cart\" class=\"custom-add-to-cart-button\">\n    ADD TO CART\n  </button>\n  <!-- Cart Notification (Optional) -->\n  <div class=\"cart-notification\" style=\"display: none;\">Item added to your cart!</div>\n</div>\n\n<!-- Custom Button Styles -->\n<style>\n  /* Custom Button Styling */\n  .custom-add-to-cart-button {\n    background-color: #91c2d8;  /* Color 1 */\n    color: white;\n    font-weight: bold;\n    font-size: 16px;\n    padding: 14px 30px;\n    border: none;\n    cursor: pointer;\n    border-radius: 5px;\n    transition: all 0.3s ease;\n    text-align: center;\n    width: 100%;  /* Make the button full-width (optional) */\n  }\n\n  .custom-add-to-cart-button:hover {\n    background-color: #a1c4d4;  /* Color 2 */\n    transform: scale(1.05); /* Slight grow effect */\n  }\n\n  /* Animation for Shaking on Hover */\n  .custom-add-to-cart-button.shake {\n    animation: shake 0.5s ease-in-out infinite;\n  }\n\n  /* Keyframes for Shaking Effect */\n  @keyframes shake {\n    0% { transform: translateX(0); }\n    25% { transform: translateX(-5px); }\n    50% { transform: translateX(5px); }\n    75% { transform: translateX(-5px); }\n    100% { transform: translateX(0); }\n  }\n\n  /* Cart Notification Styling */\n  .cart-notification {\n    background-color: #91c2d8;  /* Color 1 */\n    color: white;\n    padding: 10px;\n    border-radius: 5px;\n    position: fixed;\n    top: 20px;\n    right: 20px;\n    font-size: 16px;\n    display: none;\n  }\n</style>\n\n<!-- Custom Button JS -->\n<script>\n  $(document).ready(function() {\n    // When the custom Add to Cart button is clicked\n    $('#custom-add-to-cart').on('click', function(e) {\n      e.preventDefault();\n\n      var variantID = $('input[name=\"id\"]').val();  // Get variant ID from hidden input (change based on your theme)\n      var quantity = 1;\n\n      // AJAX request to add the product to the cart\n      $.ajax({\n        url: '/cart/add.js',\n        type: 'POST',\n        data: { id: variantID, quantity: quantity },\n        dataType: 'json',\n        success: function(response) {\n          // Update cart count and display notification\n          updateCartCounter();\n          showCartNotification();\n        },\n        error: function(error) {\n          console.log('Error adding to cart:', error);\n        }\n      });\n\n      // Trigger shake animation on button\n      $(this).addClass('shake');\n      setTimeout(function() {\n        $('#custom-add-to-cart').removeClass('shake');\n      }, 1000);  // Shake animation duration\n    });\n\n    // Update cart counter after adding an item\n    function updateCartCounter() {\n      $.getJSON('/cart.js', function(cart) {\n        // Update the cart counter display\n        $('.cart-counter').text(cart.item_count);\n      });\n    }\n\n    // Show a notification for 2 seconds\n    function showCartNotification() {\n      $('.cart-notification').fadeIn().delay(2000).fadeOut();\n    }\n  });\n</script>"
-          }
-        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -290,7 +284,6 @@
         "price",
         "5fcc0428-e768-4cb7-bea3-eb0274198dd1",
         "04ba004e-2f54-4936-8b1c-8bcadf6573f6",
-        "custom_liquid_pcHqtj",
         "buy_buttons",
         "e0a0b690-50df-4ca4-acfd-ce2980696cce",
         "e7a28cbe-03cb-4c9d-a2c4-0e3e76ffb3e5",
