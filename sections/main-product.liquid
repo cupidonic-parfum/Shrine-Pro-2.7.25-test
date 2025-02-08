@@ -3,7 +3,6 @@
   class="page-width section-{{ section.id }}-padding"
   data-section="{{ section.id }}"
 >
-
   {%- style -%}
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.mobile_padding_top }}px;
@@ -64,16 +63,16 @@
       if section.settings.hide_variants and variant_images.size == product.media.size
         assign single_media_visible = true
       endif
-    
+
       assign media_count = product.media.size
       if section.settings.hide_variants and media_count > 1 and variant_images.size > 0
         assign media_count = media_count | minus: variant_images.size | plus: 1
       endif
-    
+
       if media_count == 1 or single_media_visible
         assign single_media_visible_mobile = true
       endif
-    
+
       if media_count == 0 or single_media_visible_mobile or section.settings.mobile_thumbnails == 'show' or section.settings.mobile_thumbnails == 'columns' and media_count < 3
         assign hide_mobile_slider = true
       endif
@@ -94,7 +93,11 @@
             {%- when 'text' -%}
               {% render 'text-with-icon-block', block: block, margins: true, block_attributes: true %}
             {%- when 'title' -%}
-              <div class="product__title" {{ block.shopify_attributes }} style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;">
+              <div
+                class="product__title"
+                {{ block.shopify_attributes }}
+                style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;"
+              >
                 <h1 class="{{ block.settings.text_size }}{% if block.settings.uppercase_title %} product-title--uppercase{% endif %}{% if block.settings.title_alignment == 'center' %} center{% endif %}">
                   {{ product.title | escape }}
                 </h1>
@@ -107,8 +110,14 @@
             {% when 'rating_stars' %}
               {% render 'rating-stars-block', block: block, margins: true, block_attributes: true %}
             {%- when 'price' -%}
-              <div class="no-js-hidden product-page-price" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }} style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;">
-                {% liquid 
+              <div
+                class="no-js-hidden product-page-price"
+                id="price-{{ section.id }}"
+                role="status"
+                {{ block.shopify_attributes }}
+                style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;"
+              >
+                {% liquid
                   assign price_second = false
                   if block.settings.layout == 'price_second'
                     assign price_second = true
@@ -133,24 +142,43 @@
                 {%- endform -%}
               </div>
             {% when 'clickable_discount' %}
-              <div style='--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;' {{ block.shopify_attributes }}>
+              <div
+                style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;"
+                {{ block.shopify_attributes }}
+              >
                 {% if block.settings.discount_code != blank %}
-                  <clickable-discount class='clickable-discount' data-applied='false' data-code="{{ block.settings.discount_code }}" data-loading="false" data-error='false' style='--mobile-text-size: {{ block.settings.mobile_text_size | divided_by: 10.0 }}rem;--desktop-text-size: {{ block.settings.desktop_text_size | divided_by: 10.0 }}rem;--padding:{{ block.settings.padding | divided_by: 7.0 }}em;--corner-radius:{{ block.settings.corner_radius | divided_by: 100.0 }}em;--alignment:{{ block.settings.alignment }};'>
-                    <button class='clickable-discount__btn'>
-                      <div class='clickable-discount__btn__text-1 product__text-container product__text-container--{{ block.settings.alignment }}{% if block.settings.enable_bg %} product__text-container--background{% endif %}'  style='--bg-color:{{ block.settings.bg_color_1 }};--icon-scale:{{ block.settings.icon_scale | divided_by: 100.0 }};' >
-                        <p class="product__text product__text-{{ block.settings.alignment }}" style="--text-color:{{ block.settings.text_color_1 }};--icon-color:{{ block.settings.icon_color_1 }};">
+                  <clickable-discount
+                    class="clickable-discount"
+                    data-applied="false"
+                    data-code="{{ block.settings.discount_code }}"
+                    data-loading="false"
+                    data-error="false"
+                    style="--mobile-text-size: {{ block.settings.mobile_text_size | divided_by: 10.0 }}rem;--desktop-text-size: {{ block.settings.desktop_text_size | divided_by: 10.0 }}rem;--padding:{{ block.settings.padding | divided_by: 7.0 }}em;--corner-radius:{{ block.settings.corner_radius | divided_by: 100.0 }}em;--alignment:{{ block.settings.alignment }};"
+                  >
+                    <button class="clickable-discount__btn">
+                      <div
+                        class="clickable-discount__btn__text-1 product__text-container product__text-container--{{ block.settings.alignment }}{% if block.settings.enable_bg %} product__text-container--background{% endif %}"
+                        style="--bg-color:{{ block.settings.bg_color_1 }};--icon-scale:{{ block.settings.icon_scale | divided_by: 100.0 }};"
+                      >
+                        <p
+                          class="product__text product__text-{{ block.settings.alignment }}"
+                          style="--text-color:{{ block.settings.text_color_1 }};--icon-color:{{ block.settings.icon_color_1 }};"
+                        >
                           {% if block.settings.custom_icon_1 != blank %}
                             <img
                               src="{{ block.settings.custom_icon_1 | image_url }}"
                               alt="{{ block.settings.custom_icon_1.alt }}"
-                              width='auto'
-                              height='auto'
-                              loading='lazy'
+                              width="auto"
+                              height="auto"
+                              loading="lazy"
                             >
                           {% elsif block.settings.icon_1 != blank %}
-                            {% render 'material-icon', icon: block.settings.icon_1, filled: block.settings.filled_icon_1 %}
+                            {% render 'material-icon',
+                              icon: block.settings.icon_1,
+                              filled: block.settings.filled_icon_1
+                            %}
                           {% endif %}
-                          <span class='product__text__text'>{{- block.settings.text_1 -}}</span>
+                          <span class="product__text__text">{{- block.settings.text_1 -}}</span>
                           <svg
                             aria-hidden="true"
                             focusable="false"
@@ -162,25 +190,34 @@
                           </svg>
                         </p>
                       </div>
-                      <div class='clickable-discount__btn__text-2 product__text-container product__text-container--{{ block.settings.alignment }}{% if block.settings.enable_bg %} product__text-container--background{% endif %}'  style='--bg-color:{{ block.settings.bg_color_2 }};--icon-scale:{{ block.settings.icon_scale | divided_by: 100.0 }};' >
-                        <p class="product__text product__text-{{ block.settings.alignment }}" style="--text-color:{{ block.settings.text_color_2 }};--icon-color:{{ block.settings.icon_color_2 }};">
+                      <div
+                        class="clickable-discount__btn__text-2 product__text-container product__text-container--{{ block.settings.alignment }}{% if block.settings.enable_bg %} product__text-container--background{% endif %}"
+                        style="--bg-color:{{ block.settings.bg_color_2 }};--icon-scale:{{ block.settings.icon_scale | divided_by: 100.0 }};"
+                      >
+                        <p
+                          class="product__text product__text-{{ block.settings.alignment }}"
+                          style="--text-color:{{ block.settings.text_color_2 }};--icon-color:{{ block.settings.icon_color_2 }};"
+                        >
                           {% if block.settings.custom_icon_2 != blank %}
                             <img
                               src="{{ block.settings.custom_icon_2 | image_url }}"
                               alt="{{ block.settings.custom_icon_2.alt }}"
-                              width='auto'
-                              height='auto'
-                              loading='lazy'
+                              width="auto"
+                              height="auto"
+                              loading="lazy"
                             >
                           {% elsif block.settings.icon_2 != blank %}
-                            {% render 'material-icon', icon: block.settings.icon_2, filled: block.settings.filled_icon_2 %}
+                            {% render 'material-icon',
+                              icon: block.settings.icon_2,
+                              filled: block.settings.filled_icon_2
+                            %}
                           {% endif %}
-                          <span class='product__text__text'>{{- block.settings.text_2 -}}</span>
+                          <span class="product__text__text">{{- block.settings.text_2 -}}</span>
                         </p>
                       </div>
                     </button>
                   </clickable-discount>
-                  <p class='clickable-discount__error'>An error has occured. Please try again.</p>
+                  <p class="clickable-discount__error">An error has occured. Please try again.</p>
                 {% else %}
                   <h4>Enter a discount code in block settings</h4>
                 {% endif %}
@@ -195,13 +232,18 @@
               >
                 {%- if product.selected_or_first_available_variant.inventory_management == 'shopify' -%}
                   {%- if product.selected_or_first_available_variant.inventory_quantity > 0 -%}
-                    {%- if product.selected_or_first_available_variant.inventory_quantity <= block.settings.inventory_threshold -%}
+                    {%- if product.selected_or_first_available_variant.inventory_quantity
+                        <= block.settings.inventory_threshold
+                    -%}
                       <svg width="15" height="15" aria-hidden="true">
                         <circle cx="7.5" cy="7.5" r="7.5" fill="rgb(238,148,65, 0.3)"/>
                         <circle cx="7.5" cy="7.5" r="5" stroke="rgb(255, 255, 255)" stroke-width="1" fill="rgb(238,148,65)"/>
                       </svg>
                       {%- if block.settings.show_inventory_quantity -%}
-                        {{- 'products.product.inventory_low_stock_show_count' | t: quantity: product.selected_or_first_available_variant.inventory_quantity -}}
+                        {{-
+                          'products.product.inventory_low_stock_show_count'
+                          | t: quantity: product.selected_or_first_available_variant.inventory_quantity
+                        -}}
                       {%- else -%}
                         {{- 'products.product.inventory_low_stock' | t -}}
                       {%- endif -%}
@@ -211,9 +253,12 @@
                         <circle cx="7.5" cy="7.5" r="5" stroke="rgb(255, 255, 255)" stroke-width="1" fill="rgb(62,214,96)"/>
                       </svg>
                       {%- if block.settings.show_inventory_quantity -%}
-                        {{- 'products.product.inventory_in_stock_show_count' | t: quantity: product.selected_or_first_available_variant.inventory_quantity -}}
+                        {{-
+                          'products.product.inventory_in_stock_show_count'
+                          | t: quantity: product.selected_or_first_available_variant.inventory_quantity
+                        -}}
                       {%- else -%}
-                          {{- 'products.product.inventory_in_stock' | t -}}
+                        {{- 'products.product.inventory_in_stock' | t -}}
                       {%- endif -%}
                     {%- endif -%}
                   {%- else -%}
@@ -235,7 +280,11 @@
               </p>
             {%- when 'description' -%}
               {%- if product.description != blank -%}
-                <div class="product__description rte quick-add-hidden" {{ block.shopify_attributes }} style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;">
+                <div
+                  class="product__description rte quick-add-hidden"
+                  {{ block.shopify_attributes }}
+                  style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;"
+                >
                   {{ product.description }}
                 </div>
               {%- endif -%}
@@ -247,13 +296,18 @@
                 {{ block.shopify_attributes }}
                 style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;"
               >
-                <span class="visually-hidden">{{ 'products.product.sku' | t }}:</span> {{- product.selected_or_first_available_variant.sku -}}
+                <span class="visually-hidden">{{ 'products.product.sku' | t }}:</span>
+                {{- product.selected_or_first_available_variant.sku -}}
               </p>
             {%- when 'custom_liquid' -%}
               {{ block.settings.custom_liquid }}
             {%- when 'collapsible_tab' -%}
-              <div class="product__accordion accordion{% if block.settings.heading_size == 'small' %} accordion--small{% endif %} {% if block.settings.display_top_border %} accordion--top-border{% endif %} quick-add-hidden" style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;" {{ block.shopify_attributes }}>
-                <details class='accordion__details'>
+              <div
+                class="product__accordion accordion{% if block.settings.heading_size == 'small' %} accordion--small{% endif %} {% if block.settings.display_top_border %} accordion--top-border{% endif %} quick-add-hidden"
+                style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;"
+                {{ block.shopify_attributes }}
+              >
+                <details class="accordion__details">
                   <summary class="accordion__summary">
                     <div class="summary__title">
                       {% if block.settings.custom_icon != blank %}
@@ -282,7 +336,7 @@
                     {% endif %}
                   </summary>
                 </details>
-                <div class='accordion__content-wrapper'>
+                <div class="accordion__content-wrapper">
                   <div class="accordion__content rte" id="ProductAccordion-{{ block.id }}-{{ section.id }}">
                     {{ block.settings.content }}
                     {{ block.settings.page.content }}
@@ -301,31 +355,37 @@
                 >
                   {% comment %} TODO: enable theme-check once `item_count_for_variant` is accepted as valid filter {% endcomment %}
                   {% # theme-check-disable %}
-                  {%- assign cart_qty = cart | item_count_for_variant: product.selected_or_first_available_variant.id -%}
+                  {%- assign cart_qty = cart
+                    | item_count_for_variant: product.selected_or_first_available_variant.id
+                  -%}
                   {% # theme-check-enable %}
                   <label class="quantity__label form__label" for="Quantity-{{ section.id }}">
                     {{ 'products.product.quantity.label' | t }}
-                  <span class="quantity__rules-cart no-js-hidden{% if cart_qty == 0 %} hidden{% endif %}">
-                    <span class="loading-overlay hidden">
-                      <span class="loading-overlay__spinner">
-                        <svg
-                        aria-hidden="true"
-                        focusable="false"
-                        class="spinner"
-                        viewBox="0 0 66 66"
-                        xmlns="http://www.w3.org/2000/svg"
-                        >
-                        <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
-                        </svg>
+                    <span class="quantity__rules-cart no-js-hidden{% if cart_qty == 0 %} hidden{% endif %}">
+                      <span class="loading-overlay hidden">
+                        <span class="loading-overlay__spinner">
+                          <svg
+                            aria-hidden="true"
+                            focusable="false"
+                            class="spinner"
+                            viewBox="0 0 66 66"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                          </svg>
+                        </span>
                       </span>
+                      <span
+                        >(
+                        {{- 'products.product.quantity.in_cart_html' | t: quantity: cart_qty -}}
+                        )</span
+                      >
                     </span>
-                    <span>({{- 'products.product.quantity.in_cart_html' | t: quantity: cart_qty -}})</span>
-                  </span>
                   </label>
                   <quantity-input class="quantity" data-section="{{ section.id }}">
                     <button class="quantity__button no-js-hidden" name="minus" type="button">
                       <span class="visually-hidden">
-                      {{- 'products.product.quantity.decrease' | t: product: product.title | escape -}}
+                        {{- 'products.product.quantity.decrease' | t: product: product.title | escape -}}
                       </span>
                       {% render 'icon-minus' %}
                     </button>
@@ -338,16 +398,16 @@
                       data-min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
                       min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
                       {% if product.selected_or_first_available_variant.quantity_rule.max != null %}
-                      data-max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
-                      max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
+                        data-max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
+                        max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
                       {% endif %}
                       step="{{ product.selected_or_first_available_variant.quantity_rule.increment }}"
                       value="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
                       form="{{ product_form_id }}"
-                    />
+                    >
                     <button class="quantity__button no-js-hidden" name="plus" type="button">
                       <span class="visually-hidden">
-                      {{- 'products.product.quantity.increase' | t: product: product.title | escape -}}
+                        {{- 'products.product.quantity.increase' | t: product: product.title | escape -}}
                       </span>
                       {% render 'icon-plus' %}
                     </button>
@@ -381,9 +441,9 @@
                 </div>
               {%- endif -%}
             {%- when 'sticky_atc' -%}
-              <sticky-atc 
+              <sticky-atc
                 id="sticky-atc-{{ section.id }}"
-                class="sticky-atc color-{{ block.settings.color_scheme }}{% unless block.settings.mobile_show_sale_badge %} sticky-atc--mobile-no-badge{% endunless %}{% unless block.settings.desktop_show_sale_badge %} sticky-atc--desktop-no-badge{% endunless %}{% if block.settings.mobile_transparent_bg %} sticky-atc--mobile-transparent{% endif %}{% if block.settings.desktop_transparent_bg %} sticky-atc--desktop-transparent{% endif %}{% if block.settings.mobile_show_title or block.settings.mobile_show_price %} sticky-atc--small-mobile-select{% endif %}" 
+                class="sticky-atc color-{{ block.settings.color_scheme }}{% unless block.settings.mobile_show_sale_badge %} sticky-atc--mobile-no-badge{% endunless %}{% unless block.settings.desktop_show_sale_badge %} sticky-atc--desktop-no-badge{% endunless %}{% if block.settings.mobile_transparent_bg %} sticky-atc--mobile-transparent{% endif %}{% if block.settings.desktop_transparent_bg %} sticky-atc--desktop-transparent{% endif %}{% if block.settings.mobile_show_title or block.settings.mobile_show_price %} sticky-atc--small-mobile-select{% endif %}"
                 data-section="{{ section.id }}"
                 {%- if block.settings.display_when == 'after_scroll' -%}
                   data-after-scroll="true"
@@ -394,9 +454,9 @@
                 {%- endif -%}
                 {{ block.shopify_attributes }}
               >
-                <div class='sticky-atc-container page-width{% if block.settings.desktop_full_button_width %} sticky-atc--desktop-btn-full{% endif %}{% if block.settings.mobile_full_button_width %} sticky-atc--mobile-btn-full{% endif %}'>
+                <div class="sticky-atc-container page-width{% if block.settings.desktop_full_button_width %} sticky-atc--desktop-btn-full{% endif %}{% if block.settings.mobile_full_button_width %} sticky-atc--mobile-btn-full{% endif %}">
                   {%- if block.settings.mobile_show_image or block.settings.desktop_show_image -%}
-                    <div class='sticky-atc__image{% unless block.settings.mobile_show_image %} mobile-hidden{% endunless %}{% unless block.settings.desktop_show_image %} desktop-hidden{% endunless %}'>
+                    <div class="sticky-atc__image{% unless block.settings.mobile_show_image %} mobile-hidden{% endunless %}{% unless block.settings.desktop_show_image %} desktop-hidden{% endunless %}">
                       <img
                         id="sticky-atc-image-{{ section.id }}"
                         src="{{ product.featured_image | image_url: width: 500 }}"
@@ -407,29 +467,32 @@
                       >
                     </div>
                   {%- endif -%}
-                  <div class='sticky-atc__left'>
-                    <div class='sticky-atc__left__content'>
+                  <div class="sticky-atc__left">
+                    <div class="sticky-atc__left__content">
                       {% if block.settings.mobile_show_title or block.settings.desktop_show_title %}
-                        <h4 class='sticky-atc__title{% unless block.settings.mobile_show_title %} mobile-hidden{% endunless %}{% unless block.settings.desktop_show_title %} desktop-hidden{% endunless %}'>
+                        <h4 class="sticky-atc__title{% unless block.settings.mobile_show_title %} mobile-hidden{% endunless %}{% unless block.settings.desktop_show_title %} desktop-hidden{% endunless %}">
                           {{ product.title }}
                         </h4>
                       {% endif %}
                       {% if block.settings.mobile_rating_stars or block.settings.desktop_rating_stars %}
-                        <div class='rating-stars-and-text font-size--desktop-auto flex-center{% unless block.settings.mobile_rating_stars %} mobile-hidden{% endunless %}{% unless block.settings.desktop_rating_stars %} desktop-hidden{% endunless %}' style='--bg-star-color:{{ block.settings.star_color }};--font-size:1.3rem;--alignment:flex-start;'>
-                          <div class='rating-stars__container rating-stars__container--underlay'>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill='currentColor'>
+                        <div
+                          class="rating-stars-and-text font-size--desktop-auto flex-center{% unless block.settings.mobile_rating_stars %} mobile-hidden{% endunless %}{% unless block.settings.desktop_rating_stars %} desktop-hidden{% endunless %}"
+                          style="--bg-star-color:{{ block.settings.star_color }};--font-size:1.3rem;--alignment:flex-start;"
+                        >
+                          <div class="rating-stars__container rating-stars__container--underlay">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor">
                               <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/>
                             </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill='currentColor'>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor">
                               <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/>
                             </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill='currentColor'>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor">
                               <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/>
                             </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill='currentColor'>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor">
                               <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/>
                             </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill='currentColor'>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="currentColor">
                               <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"/>
                             </svg>
                           </div>
@@ -437,7 +500,10 @@
                         </div>
                       {% endif %}
                       {%- if block.settings.mobile_show_price or block.settings.desktop_show_price -%}
-                        <div class='sticky-atc__price{% unless block.settings.mobile_show_price %} mobile-hidden{% endunless %}{% unless block.settings.desktop_show_price %} desktop-hidden{% endunless %}' id="sticky-atc-separate-price-{{ section.id }}">
+                        <div
+                          class="sticky-atc__price{% unless block.settings.mobile_show_price %} mobile-hidden{% endunless %}{% unless block.settings.desktop_show_price %} desktop-hidden{% endunless %}"
+                          id="sticky-atc-separate-price-{{ section.id }}"
+                        >
                           {%- render 'price',
                             product: product,
                             use_variant: true,
@@ -463,8 +529,8 @@
                             <select class="sticky-atc__variant-select select__select variant-dropdown">
                               {% for variant in product.variants %}
                                 <option
-                                  value='{{ variant.options | join: ',' }}'
-                                  data-options='{{ variant.options | join: ',' }}'
+                                  value="{{ variant.options | join: ',' }}"
+                                  data-options="{{ variant.options | join: ',' }}"
                                   {% if product.selected_or_first_available_variant.id == variant.id %}
                                     selected
                                   {% endif %}
@@ -485,15 +551,15 @@
                       </secondary-variant-select>
                     {%- endif -%}
                   </div>
-                  <div class='sticky-atc__button'>
+                  <div class="sticky-atc__button">
                     {%- if block.settings.function == 'add_to_cart' -%}
                       {%- liquid
                         assign check_against_inventory = true
-                        if product.selected_or_first_available_variant.inventory_management != 'shopify' or  product.selected_or_first_available_variant.inventory_policy == 'continue'
-                        assign check_against_inventory = false
+                        if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
+                          assign check_against_inventory = false
                         endif
                         if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
-                        assign quantity_rule_soldout = true
+                          assign quantity_rule_soldout = true
                         endif
                       -%}
                       <button
@@ -507,11 +573,18 @@
                       >
                         <span class="sticky-atc__error" style="display:none;"></span>
                         <span class="sticky-atc__label">
-                          {%- if product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+                          {%- if product.selected_or_first_available_variant.available == false
+                            or quantity_rule_soldout
+                          -%}
                             {{ 'products.product.sold_out' | t }}
                           {%- else -%}
-                            {% if block.settings.mobile_show_price_in_button or block.settings.desktop_show_price_in_button %}
-                              <span id="sticky-atc-price-{{ section.id }}" class="{% unless block.settings.mobile_show_price_in_button %} mobile-hidden{% endunless %}{% unless block.settings.desktop_show_price_in_button %} desktop-hidden{% endunless %}">
+                            {% if block.settings.mobile_show_price_in_button
+                              or block.settings.desktop_show_price_in_button
+                            %}
+                              <span
+                                id="sticky-atc-price-{{ section.id }}"
+                                class="{% unless block.settings.mobile_show_price_in_button %} mobile-hidden{% endunless %}{% unless block.settings.desktop_show_price_in_button %} desktop-hidden{% endunless %}"
+                              >
                                 {{ product.selected_or_first_available_variant.price | money }} •
                               </span>
                             {% endif %}
@@ -531,10 +604,15 @@
                         </div>
                       </button>
                     {% else %}
-                      <button class='button sticky-atc__scroll-btn'>
+                      <button class="button sticky-atc__scroll-btn">
                         <span>
-                          {% if block.settings.mobile_show_price_in_button or block.settings.desktop_show_price_in_button %}
-                            <span id="sticky-atc-price-{{ section.id }}" class="{% unless block.settings.mobile_show_price_in_button %} mobile-hidden{% endunless %}{% unless block.settings.desktop_show_price_in_button %} desktop-hidden{% endunless %}">
+                          {% if block.settings.mobile_show_price_in_button
+                            or block.settings.desktop_show_price_in_button
+                          %}
+                            <span
+                              id="sticky-atc-price-{{ section.id }}"
+                              class="{% unless block.settings.mobile_show_price_in_button %} mobile-hidden{% endunless %}{% unless block.settings.desktop_show_price_in_button %} desktop-hidden{% endunless %}"
+                            >
                               {{ product.selected_or_first_available_variant.price | money }} •
                             </span>
                           {% endif %}
@@ -566,15 +644,28 @@
               </a>
             {%- when 'share' -%}
               {% assign share_url = product.selected_variant.url | default: product.url | prepend: request.origin %}
-              {% render 'share-button',
-                block: block,
-                share_link: share_url
-              %}
+              {% render 'share-button', block: block, share_link: share_url %}
 
             {%- when 'variant_picker' -%}
               {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
             {%- when 'buy_buttons' -%}
-              {%- render 'buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true, main_product: true -%}
+              {%- render 'buy-buttons',
+                block: block,
+                product: product,
+                product_form_id: product_form_id,
+                section_id: section.id,
+                show_pickup_availability: true,
+                main_product: true
+              -%}
+            {%- when 'custom_add_to_cart_button' -%}
+              {%- render 'custom-add-to-cart-button',
+                block: block,
+                product: product,
+                product_form_id: product_form_id,
+                section_id: section.id,
+                show_pickup_availability: true,
+                main_product: true
+              -%}
             {%- when 'reviews' -%}
               {%- render 'reviews', block: block -%}
             {%- when 'rating' -%}
@@ -615,13 +706,16 @@
                 </p>
               {%- endif -%}
             {%- when 'payment_badges' -%}
-              <div class='payment-badges-block' style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;">
+              <div
+                class="payment-badges-block"
+                style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;"
+              >
                 <ul class="payment-badges" role="list">
                   {% assign enabled_payment_types = shop.enabled_payment_types %}
                   {% if block.settings.enabled_payment_types != blank %}
                     {% assign enabled_payment_types = block.settings.enabled_payment_types | remove: ' ' | split: ',' %}
                   {% endif %}
-            
+
                   {%- for type in enabled_payment_types -%}
                     {% assign payment_type = type | strip %}
                     <li class="list-payment__item">
@@ -631,11 +725,19 @@
                 </ul>
               </div>
             {% when 'urgency' %}
-              <p class="urgency-text color-{{ block.settings.color_scheme }}" {{ block.shopify_attributes }} style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;">
+              <p
+                class="urgency-text color-{{ block.settings.color_scheme }}"
+                {{ block.shopify_attributes }}
+                style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;"
+              >
                 <strong>{{ block.settings.urgency }}</strong>
               </p>
             {% when 'emoji_benefits' %}
-              <div class='emoji-benefits-container' {{ block.shopify_attributes }} style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;">
+              <div
+                class="emoji-benefits-container"
+                {{ block.shopify_attributes }}
+                style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;"
+              >
                 {{ block.settings.benefits }}
               </div>
             {% when 'quantity_gifts' %}
@@ -653,10 +755,10 @@
             {% when 'product_upsell' %}
               {% render 'upsell-block', block: block, type: 'product-info' %}
             {% when 'image' %}
-              <div 
-                class="product-info__image-block{% if block.settings.Full_mobile_width %} product-info__image-block--mobile-full{% endif %}" 
+              <div
+                class="product-info__image-block{% if block.settings.Full_mobile_width %} product-info__image-block--mobile-full{% endif %}"
                 style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;--image-width:{{ block.settings.width }}%;--image-alignment:{{ block.settings.alignment }};--border-radius:{{ block.settings.border_radius | divided_by: 10.0 }}rem;"
-                {{ block.shopify_attributes }} 
+                {{ block.shopify_attributes }}
               >
                 {% if block.settings.image != blank %}
                   {%- capture sizes -%}
@@ -673,17 +775,27 @@
                 {% endif %}
               </div>
             {% when 'video' %}
-              <div 
-                class="product-info__image-block{% if block.settings.Full_mobile_width %} product-info__image-block--mobile-full{% endif %}" 
+              <div
+                class="product-info__image-block{% if block.settings.Full_mobile_width %} product-info__image-block--mobile-full{% endif %}"
                 style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;--image-width:{{ block.settings.width }}%;--image-alignment:{{ block.settings.alignment }};--border-radius:{{ block.settings.border_radius | divided_by: 10.0 }}rem;"
                 {{ block.shopify_attributes }}
               >
                 {% render 'video-player', block: block %}
               </div>
             {%- when 'complementary' -%}
-              <product-recommendations class="complementary-products quick-add-hidden no-js-hidden{% if block.settings.make_collapsible_row %} is-accordion{% endif %}{% if block.settings.enable_quick_add %} complementary-products-contains-quick-add{% endif %}" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ block.settings.product_list_limit }}&intent=complementary" style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;">
+              <product-recommendations
+                class="complementary-products quick-add-hidden no-js-hidden{% if block.settings.make_collapsible_row %} is-accordion{% endif %}{% if block.settings.enable_quick_add %} complementary-products-contains-quick-add{% endif %}"
+                data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ block.settings.product_list_limit }}&intent=complementary"
+                style="--margin-top: {{ block.settings.margin_top | divided_by: 10.0 }}rem;--margin-bottom: {{ block.settings.margin_bottom | divided_by: 10.0 }}rem;"
+              >
                 {%- if recommendations.performed and recommendations.products_count > 0 -%}
-                  <aside aria-label="{{ 'accessibility.complementary_products' | t }}" {{ block.shopify_attributes }}{% if block.settings.make_collapsible_row %} class="product__accordion accordion"{% endif %}>
+                  <aside
+                    aria-label="{{ 'accessibility.complementary_products' | t }}"
+                    {{ block.shopify_attributes -}}
+                    {% if block.settings.make_collapsible_row %}
+                      class="product__accordion accordion"
+                    {% endif %}
+                  >
                     <div class="complementary-products__container">
                       {%- if block.settings.make_collapsible_row -%}
                         <details id="Details-{{ block.id }}-{{ section.id }}" open>
@@ -698,16 +810,39 @@
                         {%- endif -%}
                       </div>
                       {%- if block.settings.make_collapsible_row -%}
-                          {% render 'icon-caret' %}
+                        {% render 'icon-caret' %}
                         </summary>
                       {%- endif -%}
                       <slideshow-component class="slider-mobile-gutter">
-                        {%- assign number_of_slides = recommendations.products_count | plus: 0.0 | divided_by: block.settings.products_per_page | ceil -%}
-                        <div id="Slider-{{ block.id }}" class="contains-card contains-card--product complementary-slider grid grid--1-col slider slider--everywhere" role="list"{% if number_of_slides > 1 %} aria-label="{{ 'general.slider.name' | t }}"{% endif %}>
+                        {%- assign number_of_slides = recommendations.products_count
+                          | plus: 0.0
+                          | divided_by: block.settings.products_per_page
+                          | ceil
+                        -%}
+                        <div
+                          id="Slider-{{ block.id }}"
+                          class="contains-card contains-card--product complementary-slider grid grid--1-col slider slider--everywhere"
+                          role="list"
+                          {% if number_of_slides > 1 %}
+                            aria-label="{{ 'general.slider.name' | t }}"
+                          {% endif %}
+                        >
                           {%- for i in (1..number_of_slides) -%}
-                            <div id="Slide-{{ block.id }}-{{ forloop.index }}" class="complementary-slide complementary-slide--{{ settings.card_style }} grid__item slider__slide slideshow__slide" tabindex="-1" role="group"{% if number_of_slides > 1 %} aria-roledescription="{{ 'sections.slideshow.slide' | t }}" aria-label="{{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"{% endif %}>
+                            <div
+                              id="Slide-{{ block.id }}-{{ forloop.index }}"
+                              class="complementary-slide complementary-slide--{{ settings.card_style }} grid__item slider__slide slideshow__slide"
+                              tabindex="-1"
+                              role="group"
+                              {% if number_of_slides > 1 %}
+                                aria-roledescription="{{ 'sections.slideshow.slide' | t }}"
+                                aria-label="{{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
+                              {% endif %}
+                            >
                               <ul class="list-unstyled" role="list">
-                                {%- for product in recommendations.products limit: block.settings.products_per_page offset: continue -%}
+                                {%- for product in recommendations.products
+                                  limit: block.settings.products_per_page
+                                  offset: continue
+                                -%}
                                   <li>
                                     {% render 'card-product',
                                       card_product: product,
@@ -727,7 +862,14 @@
                         </div>
                         {%- if number_of_slides > 1 -%}
                           <div class="slider-buttons no-js-hidden">
-                            <button type="button" class="slider-button slider-button--prev" name="previous" aria-label="{{ 'general.slider.previous_slide' | t }}">{% render 'icon-caret' %}</button>
+                            <button
+                              type="button"
+                              class="slider-button slider-button--prev"
+                              name="previous"
+                              aria-label="{{ 'general.slider.previous_slide' | t }}"
+                            >
+                              {% render 'icon-caret' %}
+                            </button>
                             <div class="slider-counter slider-counter--{{ block.settings.pagination_style }}{% if block.settings.pagination_style == 'counter' or block.settings.pagination_style == 'numbers' %} caption{% endif %}">
                               {%- if block.settings.pagination_style == 'counter' -%}
                                 <span class="slider-counter--current">1</span>
@@ -737,14 +879,29 @@
                               {%- else -%}
                                 <div class="slideshow__control-wrapper">
                                   {%- for i in (1..number_of_slides) -%}
-                                    <button class="slider-counter__link slider-counter__link--{{ block.settings.pagination_style }} link" aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}" aria-controls="Slider-{{ block.id }}">
-                                      {%- if block.settings.pagination_style == 'numbers' -%}{{ forloop.index }}{% else %}<span class="dot"></span>{%- endif -%}
+                                    <button
+                                      class="slider-counter__link slider-counter__link--{{ block.settings.pagination_style }} link"
+                                      aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
+                                      aria-controls="Slider-{{ block.id }}"
+                                    >
+                                      {%- if block.settings.pagination_style == 'numbers' -%}
+                                        {{ forloop.index -}}
+                                      {%- else -%}
+                                        <span class="dot"></span>
+                                      {%- endif -%}
                                     </button>
                                   {%- endfor -%}
                                 </div>
                               {%- endif -%}
                             </div>
-                            <button type="button" class="slider-button slider-button--next" name="next" aria-label="{{ 'general.slider.next_slide' | t }}">{% render 'icon-caret' %}</button>
+                            <button
+                              type="button"
+                              class="slider-button slider-button--next"
+                              name="next"
+                              aria-label="{{ 'general.slider.next_slide' | t }}"
+                            >
+                              {% render 'icon-caret' %}
+                            </button>
                           </div>
                         {%- endif -%}
                       </slideshow-component>
@@ -757,14 +914,17 @@
                 {{ 'component-card.css' | asset_url | stylesheet_tag }}
                 {{ 'component-complementary-products.css' | asset_url | stylesheet_tag }}
                 {%- if block.settings.enable_quick_add -%}
-                  <link rel="stylesheet" href="{{ 'quick-add.css' | asset_url }}" media="print" onload="this.media='all'">
+                  <link
+                    rel="stylesheet"
+                    href="{{ 'quick-add.css' | asset_url }}"
+                    media="print"
+                    onload="this.media='all'"
+                  >
                   <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
                 {%- endif -%}
               </product-recommendations>
             {%- when 'icon_with_text' -%}
-              {% render 'icon-with-text',
-                block: block
-              %}
+              {% render 'icon-with-text', block: block %}
           {%- endcase -%}
         {%- endfor -%}
         <a href="{{ product.url }}" class="link product__view-details animate-arrow">
@@ -781,7 +941,7 @@
     {%- endif -%}
   </div>
 
-  {% render 'product-media-modal' variant_images: variant_images %}
+  {% render 'product-media-modal', variant_images: variant_images %}
 
   {% assign popups = section.blocks | where: 'type', 'popup' %}
   {%- for block in popups -%}
@@ -2671,7 +2831,7 @@
           "default": 24
         }
       ]
-    }, 
+    },
     {
       "type": "sticky_atc",
       "name": "Sticky Add To Cart",
@@ -2688,19 +2848,19 @@
             {
               "value": "add_to_cart",
               "label": "Add to Cart"
-            }, 
+            },
             {
               "value": "scroll_#ProductInfo-id",
               "label": "Scroll to Product information"
-            }, 
+            },
             {
               "value": "scroll_#variant-selects-id",
               "label": "Scroll to Variant picker"
-            }, 
+            },
             {
               "value": "scroll_#quantity-breaks-id",
               "label": "Scroll to Quantity breaks"
-            }, 
+            },
             {
               "value": "scroll_.pricing-table",
               "label": "Scroll to Pricing table"
@@ -2716,7 +2876,7 @@
             {
               "value": "always",
               "label": "Always"
-            }, 
+            },
             {
               "value": "after_scroll",
               "label": "After scrolling past regular ATC button"
@@ -3688,7 +3848,7 @@
           "type": "select",
           "id": "color_scheme",
           "options": [
-            { 
+            {
               "value": "accent-1",
               "label": "t:sections.all.colors.accent_1.label"
             },
@@ -3727,7 +3887,7 @@
           "type": "select",
           "id": "table_header_color_scheme",
           "options": [
-            { 
+            {
               "value": "accent-1",
               "label": "t:sections.all.colors.accent_1.label"
             },
@@ -3969,7 +4129,7 @@
           "type": "select",
           "id": "color_scheme",
           "options": [
-            { 
+            {
               "value": "accent-1",
               "label": "t:sections.all.colors.accent_1.label"
             },
@@ -4851,7 +5011,7 @@
           "type": "select",
           "id": "color_scheme",
           "options": [
-            { 
+            {
               "value": "accent-1",
               "label": "t:sections.all.colors.accent_1.label"
             },
@@ -6423,6 +6583,10 @@
           "default": 24
         }
       ]
+    },
+    {
+      "type": "custom_add_to_cart_button",
+      "name": "Custom Add to Cart Button"
     }
   ],
   "settings": [
