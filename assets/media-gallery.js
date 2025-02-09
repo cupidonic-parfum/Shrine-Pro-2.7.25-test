@@ -40,6 +40,12 @@ if (!customElements.get("media-gallery")) {
           this.mql.matches
         )
           this.removeListSemantic();
+
+        // Select the variant thumbnail by default when the page loads
+        const variantId = document.querySelector('input[name="id"]').value;
+        document
+          .querySelector(`[data-variant-id="${variantId}"] > button`)
+          .click();
       }
 
       onSlideChanged(event) {
